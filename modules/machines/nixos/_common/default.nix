@@ -25,10 +25,10 @@
     };
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   # agenix decrypts secrets at boot using the SSH host key.
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-
-  programs.git.enable = true;
 
   system.autoUpgrade = {
     enable = true;
@@ -37,8 +37,6 @@
     dates = "*-*-* 03:30:00";
     allowReboot = true;
   };
-
-  security.sudo.wheelNeedsPassword = false;
 
   services.resolved = {
     enable = true;
@@ -54,6 +52,8 @@
   ];
 
   system.stateVersion = "25.11";
+
+  programs.git.enable = true;
 
   environment.systemPackages = with pkgs; [
     nano
