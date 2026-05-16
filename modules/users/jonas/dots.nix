@@ -23,7 +23,10 @@
       '';
 
       shellAliases = {
-        ll = "ls -alh";
+        ls     = "eza";
+        ll     = "eza -la";
+        tree   = "eza --tree";
+        grep   = "rg";
         update = "sudo nixos-rebuild switch";
       };
     };
