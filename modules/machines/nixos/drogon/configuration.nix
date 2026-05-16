@@ -29,7 +29,10 @@
     };
   };
 
-  caddy.enable = true;
+  caddy = {
+    enable      = true;
+    acmeDomains = [ "jonrei.de" "reineke.cc" ];
+  };
   fail2ban.enable = true;
   opencloud.enable = true;
 

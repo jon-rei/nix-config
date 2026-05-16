@@ -22,6 +22,7 @@
     settings = {
       PasswordAuthentication = false;
       PermitRootLogin = "no";
+      LoginGraceTime = 0;
     };
   };
 
@@ -67,5 +68,10 @@
     dnsutils
     unixtools.netstat
     mtr
+    eza
+    ncdu
+    ripgrep
+    jq
+    rsync
   ];
 }

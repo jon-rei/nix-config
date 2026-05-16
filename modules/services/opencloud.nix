@@ -56,16 +56,22 @@ in
       };
     };
 
-    services.caddy.virtualHosts.${domain}.extraConfig = ''
-      reverse_proxy http://127.0.0.1:${toString port}
-      header Strict-Transport-Security "max-age=31536000"
-      request_body {
-        max_size 10GB
-      }
-    '';
+    services.caddy.virtualHosts.${domain} = {
+      useACMEHost = "jonrei.de";
+      extraConfig = ''
+        reverse_proxy http://127.0.0.1:${toString port}
+        header Strict-Transport-Security "max-age=31536000"
+        request_body {
+          max_size 10GB
+        }
+      '';
+    };
 
-    services.caddy.virtualHosts.${collaboraDomain}.extraConfig = ''
-      reverse_proxy http://127.0.0.1:9980
-    '';
+    services.caddy.virtualHosts.${collaboraDomain} = {
+      useACMEHost = "jonrei.de";
+      extraConfig = ''
+        reverse_proxy http://127.0.0.1:9980
+      '';
+    };
   };
 }
