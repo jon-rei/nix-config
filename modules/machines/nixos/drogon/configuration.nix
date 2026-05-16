@@ -4,15 +4,10 @@
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
     ./secrets.nix
-    ../../../services/caddy.nix
-    ../../../services/opencloud.nix
-    ../../../services/fail2ban.nix
   ];
 
   boot.loader.grub.enable = true;
-
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
-
   zramSwap.enable = true;
 
   networking = {
@@ -33,6 +28,10 @@
       allowedTCPPorts = [ 22 80 443 ];
     };
   };
+
+  caddy.enable = true;
+  fail2ban.enable = true;
+  opencloud.enable = true;
 
   backup = {
     enable = true;

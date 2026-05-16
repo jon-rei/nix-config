@@ -12,5 +12,4 @@ in
 {
   "opencloud-env.age".publicKeys = keyList;
   "restic-password.age".publicKeys = keyList;
-  "storagebox-user.age".publicKeys = keyList;
 }

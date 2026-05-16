@@ -12,6 +12,9 @@ let
         inputs.home-manager.nixosModules.home-manager
         inputs.disko.nixosModules.disko
         ../../services/backup.nix
+        ../../services/caddy.nix
+        ../../services/fail2ban.nix
+        ../../services/opencloud.nix
         ./_common
         ../../users/jonas
         ./${hostname}/configuration.nix

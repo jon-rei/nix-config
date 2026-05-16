@@ -24,6 +24,10 @@ dry host:
     --no-reexec \
     --sudo
 
+# Show package diff without applying
+diff host:
+  nix develop --command nh os build .#nixosConfigurations.{{host}}
+
 # Format all nix files
 fmt:
   nix develop --command nixfmt **/*.nix

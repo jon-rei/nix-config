@@ -1,20 +1,8 @@
-{ ... }:
-let
-  site1 = "jonrei.de";
-  site2 = "example2.com";  # TODO: replace
-in
+{ config, lib, ... }:
 {
-  services.caddy.enable = true;
+  options.caddy.enable = lib.mkEnableOption "Caddy web server";
 
-  # services.caddy.virtualHosts.${site1}.extraConfig = ''
-  #   root * /var/www/${site1}
-  #   file_server
-  #   encode gzip
-  # '';
-
-  # services.caddy.virtualHosts.${site2}.extraConfig = ''
-  #   root * /var/www/${site2}
-  #   file_server
-  #   encode gzip
-  # '';
+  config = lib.mkIf config.caddy.enable {
+    services.caddy.enable = true;
+  };
 }
