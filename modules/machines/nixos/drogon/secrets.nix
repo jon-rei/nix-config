@@ -1,8 +1,8 @@
 { inputs, ... }:
 {
   age.secrets.opencloudAdminEnv = {
-    file  = "${inputs.self}/secrets/drogon/opencloud-admin-env.age";
+    file  = "${inputs.self}/secrets/opencloud-admin-env.age";
     owner = "opencloud";
   };
-  age.secrets.resticPassword.file       = "${inputs.self}/secrets/drogon/restic-password.age";
+  age.secrets.resticPassword.file = "${inputs.self}/secrets/restic-password.age";
 }
