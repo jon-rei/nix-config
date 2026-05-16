@@ -68,10 +68,10 @@ age-keygen -o ~/.config/age/keys.txt
 # → add to secrets/secrets.nix under desktop
 ```
 
-**Step 2 — install drogon** (see below). After first boot:
+**Step 2 — install machine** (see below). After first boot:
 
 ```bash
-# Get drogon's SSH host pubkey
+# Get SSH host pubkey
 ssh-keyscan <ip> | grep ed25519
 # → add to secrets/secrets.nix under drogon
 
@@ -80,8 +80,8 @@ cd secrets
 agenix -e drogon/opencloud-admin-env.age  # IDM_ADMIN_PASSWORD=<password>
 agenix -e drogon/restic-password.age      # <random password, never change>
 
-# Add drogon's SSH host key to your storage box authorized_keys (for restic backups)
-# The host key public key: ssh-keyscan <ip> | grep ed25519
+# Add SSH host key to your storage box authorized_keys (for restic backups)
+cat /etc/ssh/ssh_host_ed25519_key.pub | ssh -p23 u525833@u525833.your-storagebox.de install-ssh-key
 
 # Redeploy
 just deploy drogon

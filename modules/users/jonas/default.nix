@@ -10,7 +10,7 @@
     isNormalUser = true;
     uid = 1000;
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "podman" ];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKF+wET8HXBy9tZXqI0ZNvtaXqqpEjNz8tNJD1nyJDjq"
     ];

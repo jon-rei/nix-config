@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
   options.backup = {
     enable = lib.mkEnableOption "restic backup to Hetzner storage box";
@@ -21,13 +21,23 @@
   };
 
   config = lib.mkIf config.backup.enable {
+    programs.ssh.extraConfig = ''
+      Host storagebox
+        HostName ${config.backup.storageBox}
+        User ${config.backup.storageBoxUser}
+        IdentityFile /etc/ssh/ssh_host_ed25519_key
+        Port 23
+    '';
+
+    environment.shellAliases.restic = "sudo ${pkgs.restic}/bin/restic -r sftp:storagebox:./backups/${config.networking.hostName} -p ${config.age.secrets.resticPassword.path}";
+
     services.restic.backups.storagebox = {
       paths = config.backup.paths;
 
-      repository = "sftp:${config.backup.storageBoxUser}@${config.backup.storageBox}:/backups/${config.networking.hostName}";
+      repository = "sftp:storagebox:./backups/${config.networking.hostName}";
 
       extraOptions = [
-        "sftp.command='ssh ${config.backup.storageBoxUser}@${config.backup.storageBox} -i /etc/ssh/ssh_host_ed25519_key -s sftp'"
+        "sftp.command='ssh storagebox -s sftp'"
       ];
 
       passwordFile = config.age.secrets.resticPassword.path;

@@ -6,7 +6,6 @@
     ./secrets.nix
     ../../../services/caddy.nix
     ../../../services/opencloud.nix
-    ../../../services/collabora.nix
     ../../../services/fail2ban.nix
   ];
 
@@ -37,8 +36,8 @@
 
   backup = {
     enable = true;
-    storageBox     = "u000000.your-storagebox.de";  # TODO: replace
-    storageBoxUser = "u000000";                      # TODO: replace
+    storageBox     = "u525833.your-storagebox.de";
+    storageBoxUser = "u525833";
     paths = [
       config.services.opencloud.stateDir
     ];
