@@ -20,6 +20,7 @@
         ll = "ls -alh";
         update = "sudo nixos-rebuild switch";
       };
+    };
 
     zoxide = {
       enable = true;
@@ -38,5 +39,6 @@
         name = "Jonas";
         email = "mail@jonrei.de";
       };
+    };
   };
 }
