@@ -3,7 +3,18 @@
   home.stateVersion = "25.11";
 
   # Shell
-  programs.bash.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    shellAliases = {
+      ll = "ls -alh";
+      update = "sudo nixos-rebuild switch";
+    };
+    history.size = 10000;
+  };
 
   # Git
   programs.git = {
@@ -13,10 +24,4 @@
       email = "mail@jonrei.de";
     };
   };
-
-  # Add dotfiles here — they apply to every machine jonas is on.
-  # Examples:
-  #   programs.zsh.enable = true;
-  #   programs.neovim.enable = true;
-  #   programs.tmux.enable = true;
 }
