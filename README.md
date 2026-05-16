@@ -34,7 +34,7 @@ modules/
 secrets/
   secrets.nix                    # maps age pubkeys to secret files (agenix)
   drogon/
-    opencloud-admin-env.age      # encrypted secrets committed to git
+    opencloud-env.age      # encrypted secrets committed to git
     restic-password.age
 ```
 
@@ -77,11 +77,11 @@ ssh-keyscan <ip> | grep ed25519
 
 # Create secrets (opens $EDITOR) — run from secrets/
 cd secrets
-agenix -e drogon/opencloud-admin-env.age  # IDM_ADMIN_PASSWORD=<password>
+agenix -e drogon/opencloud-env.age  # IDM_ADMIN_PASSWORD=<password>
 agenix -e drogon/restic-password.age      # <random password, never change>
 
 # Add SSH host key to your storage box authorized_keys (for restic backups)
-cat /etc/ssh/ssh_host_ed25519_key.pub | ssh -p23 u525833@u525833.your-storagebox.de install-ssh-key
+cat /etc/ssh/ssh_host_ed25519_key.pub | ssh -p23 u00000@u00000.your-storagebox.de install-ssh-key
 
 # Redeploy
 just deploy drogon
@@ -90,7 +90,7 @@ just deploy drogon
 ### Editing a secret
 
 ```bash
-cd secrets && agenix -e drogon/opencloud-admin-env.age
+cd secrets && agenix -e drogon/opencloud-env.age
 ```
 
 ## Installing drogon

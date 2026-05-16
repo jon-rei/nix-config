@@ -36,8 +36,6 @@
 
   backup = {
     enable = true;
-    storageBox     = "u525833.your-storagebox.de";
-    storageBoxUser = "u525833";
     paths = [
       config.services.opencloud.stateDir
     ];

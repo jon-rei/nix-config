@@ -19,7 +19,7 @@ in
       COLLABORATION_WOPI_SRC          = "https://${domain}";
       COLLABORATION_APP_PROOF_DISABLE = "true";
     };
-    environmentFile = config.age.secrets.opencloudAdminEnv.path;
+    environmentFile = config.age.secrets.opencloudEnv.path;
     settings.proxy.csp_config_file_location = "/etc/opencloud/csp.yaml";
 
     settings.csp.directives = {
