@@ -1,6 +1,6 @@
 { config, lib, pkgs, inputs, ... }:
 let
-  user = config.age.secrets.resticUser.path;
+  user = config.age.secrets.storageboxUser.path;
   host = "${user}.your-storagebox.de";
 in
 {
@@ -16,7 +16,7 @@ in
 
   config = lib.mkIf config.backup.enable {
     age.secrets.resticPassword.file = "${inputs.self}/secrets/restic-password.age";
-    age.secrets.resticUser.file     = "${inputs.self}/secrets/restic-user.age";
+    age.secrets.storageboxUser.file = "${inputs.self}/secrets/storagebox-user.age";
 
     programs.ssh.extraConfig = ''
       Host storagebox
