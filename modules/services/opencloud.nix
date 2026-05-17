@@ -8,6 +8,7 @@ in
   options.opencloud.enable = lib.mkEnableOption "OpenCloud with Collabora";
 
   config = lib.mkIf config.opencloud.enable {
+    motd.services = [ "opencloud" ];
     age.secrets.opencloudEnv = {
       file  = "${inputs.self}/secrets/opencloud-env.age";
       owner = "opencloud";

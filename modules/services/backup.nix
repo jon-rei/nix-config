@@ -15,6 +15,7 @@ in
   };
 
   config = lib.mkIf config.backup.enable {
+    motd.services = [ "restic-backups-storagebox.timer" ];
     age.secrets.resticPassword.file = "${inputs.self}/secrets/restic-password.age";
 
     programs.ssh.extraConfig = ''

@@ -1,6 +1,6 @@
 # nix-config
 
-Personal NixOS infrastructure, managed as a public flake on GitHub.
+Personal NixOS infrastructure, managed as a public flake on Codeberg.
 
 ## Hosts
 
@@ -110,10 +110,10 @@ nixos-anywhere SSHes in, boots into a kexec RAM environment, runs disko to wipe 
 
 ```bash
 # Remotely from your machine
-nixos-rebuild switch --flake .#drogon --target-host jonas@<ip> --use-remote-sudo
+just deploy drogon
 
 # Or directly on the host
-sudo nixos-rebuild switch --flake github:YOUR_GITHUB_USER/nix-config#drogon
+sudo nixos-rebuild switch --flake git+https://codeberg.org/jonrei/nix-config#drogon
 ```
 
 ## Adding a new host

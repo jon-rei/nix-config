@@ -11,6 +11,7 @@
   };
 
   config = lib.mkIf config.caddy.enable {
+    motd.services = [ "caddy" ];
     age.secrets.desecEnv = {
       file  = "${inputs.self}/secrets/desec-env.age";
       owner = "acme";
@@ -36,7 +37,12 @@
 
     services.caddy = {
       enable       = true;
-      globalConfig = "auto_https off";
+      globalConfig = ''
+        auto_https off
+        log {
+          output stderr
+        }
+      '';
       virtualHosts = builtins.listToAttrs (lib.flatten (map (domain: [
         { name  = "http://${domain}";
           value = { extraConfig = "redir https://{host}{uri}"; }; }

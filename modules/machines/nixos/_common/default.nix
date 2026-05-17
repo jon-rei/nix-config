@@ -10,6 +10,10 @@
       dates = "weekly";
       options = "--delete-older-than 14d";
     };
+    optimise = {
+      automatic = true;
+      dates = [ "daily" ];
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -53,6 +57,8 @@
   ];
 
   system.stateVersion = "25.11";
+
+  motd.enable = true;
 
   programs.git.enable = true;
 

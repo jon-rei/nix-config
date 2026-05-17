@@ -14,6 +14,7 @@ let
         ../../services/backup.nix
         ../../services/caddy.nix
         ../../services/fail2ban.nix
+        ../../services/motd.nix
         ../../services/opencloud.nix
         ./_common
         ../../users/jonas
