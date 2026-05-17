@@ -30,7 +30,7 @@ diff host:
 
 # Format all nix files
 fmt:
-  nix develop --command nixfmt **/*.nix
+  nix develop --command treefmt
 
 # SSH into a host
 ssh host:

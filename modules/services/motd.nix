@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   services = config.motd.services;
 
@@ -23,21 +28,31 @@ let
       "uptime"
       "cpu"
       "memory"
-      { type = "disk";    key = "Disk";    folders = "/"; }
-      { type = "localip"; showIpv4 = true; showIpv6 = false; compact = true; }
-    ] ++ lib.optional (services != []) {
+      {
+        type = "disk";
+        key = "Disk";
+        folders = "/";
+      }
+      {
+        type = "localip";
+        showIpv4 = true;
+        showIpv6 = false;
+        compact = true;
+      }
+    ]
+    ++ lib.optional (services != [ ]) {
       type = "command";
-      key  = "Services";
+      key = "Services";
       text = toString serviceScript;
     };
   };
 in
 {
   options.motd = {
-    enable   = lib.mkEnableOption "fastfetch MOTD on SSH login";
+    enable = lib.mkEnableOption "fastfetch MOTD on SSH login";
     services = lib.mkOption {
-      type        = lib.types.listOf lib.types.str;
-      default     = [];
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       description = "Systemd units to show status for. Each service module appends itself here.";
     };
   };
@@ -45,8 +60,7 @@ in
   config = lib.mkIf config.motd.enable {
     environment.systemPackages = [ pkgs.fastfetch ];
 
-    environment.etc."fastfetch/config.jsonc".text =
-      builtins.toJSON fastfetchConfig;
+    environment.etc."fastfetch/config.jsonc".text = builtins.toJSON fastfetchConfig;
 
     programs.zsh.loginShellInit = ''
       ${pkgs.fastfetch}/bin/fastfetch --config /etc/fastfetch/config.jsonc

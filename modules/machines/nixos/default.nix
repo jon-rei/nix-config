@@ -1,11 +1,18 @@
 { inputs, nixpkgs }:
 let
-  mkNixos = { hostname, system ? "x86_64-linux" }:
+  mkNixos =
+    {
+      hostname,
+      system ? "x86_64-linux",
+    }:
     nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
         inherit inputs;
-        pkgs-unstable = import inputs.nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+        pkgs-unstable = import inputs.nixpkgs-unstable {
+          inherit system;
+          config.allowUnfree = true;
+        };
       };
       modules = [
         inputs.agenix.nixosModules.default
@@ -22,12 +29,16 @@ let
       ];
     };
 
-  hosts = builtins.filter
-    (name: name != "_common" && name != "default.nix"
-      && builtins.pathExists (./. + "/${name}/configuration.nix"))
-    (builtins.attrNames (builtins.readDir ./.));
+  hosts = builtins.filter (
+    name:
+    name != "_common"
+    && name != "default.nix"
+    && builtins.pathExists (./. + "/${name}/configuration.nix")
+  ) (builtins.attrNames (builtins.readDir ./.));
 in
-  builtins.listToAttrs (map (hostname: {
-    name  = hostname;
+builtins.listToAttrs (
+  map (hostname: {
+    name = hostname;
     value = mkNixos { inherit hostname; };
-  }) hosts)
+  }) hosts
+)

@@ -21,25 +21,27 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-  let
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
-  in {
-    devShells.x86_64-linux.default = pkgs.mkShell {
-      packages = with pkgs; [
-        (pkgs.writeShellScriptBin "agenix" ''
-          exec ${inputs.agenix.packages.x86_64-linux.default}/bin/agenix -i "$HOME/.config/age/keys.txt" "$@"
-        '')
-        age
-        nixos-anywhere
-        nixos-rebuild
-        nixfmt-rfc-style   # nix formatter: nixfmt file.nix
-        nh                 # nicer nixos-rebuild: nh os switch
-        just               # task runner: just deploy drogon
-        nixos-rebuild-ng   # drop-in replacement with --no-reexec fix
-      ];
-    };
+  outputs =
+    { self, nixpkgs, ... }@inputs:
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    in
+    {
+      devShells.x86_64-linux.default = pkgs.mkShell {
+        packages = with pkgs; [
+          (pkgs.writeShellScriptBin "agenix" ''
+            exec ${inputs.agenix.packages.x86_64-linux.default}/bin/agenix -i "$HOME/.config/age/keys.txt" "$@"
+          '')
+          age
+          nixos-anywhere
+          nixos-rebuild
+          nixfmt-tree # nix formatter: treefmt
+          nh # nicer nixos-rebuild: nh os switch
+          just # task runner: just deploy drogon
+          nixos-rebuild-ng # drop-in replacement with --no-reexec fix
+        ];
+      };
 
-    nixosConfigurations = import ./modules/machines/nixos { inherit inputs nixpkgs; };
-  };
+      nixosConfigurations = import ./modules/machines/nixos { inherit inputs nixpkgs; };
+    };
 }

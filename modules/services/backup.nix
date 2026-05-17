@@ -1,4 +1,9 @@
-{ config, lib, inputs, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 let
   storageboxUser = "u525833";
   storageboxHost = "${storageboxUser}.your-storagebox.de";
@@ -9,7 +14,7 @@ in
 
     paths = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = "Paths to include in the backup.";
     };
   };
@@ -26,8 +31,8 @@ in
     '';
 
     services.restic.backups.storagebox = {
-      paths        = config.backup.paths;
-      repository   = "sftp://${storageboxUser}@${storageboxHost}/./backups/${config.networking.hostName}";
+      paths = config.backup.paths;
+      repository = "sftp://${storageboxUser}@${storageboxHost}/./backups/${config.networking.hostName}";
       passwordFile = config.age.secrets.resticPassword.path;
       extraBackupArgs = [ "--compression auto" ];
       backupPrepareCommand = "restic-storagebox unlock || true";
