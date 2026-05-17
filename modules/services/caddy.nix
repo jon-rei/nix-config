@@ -37,11 +37,9 @@
 
     services.caddy = {
       enable       = true;
-      globalConfig = ''
-        auto_https off
-        log {
-          output stderr
-        }
+      globalConfig = "auto_https off";
+      logFormat = ''
+        output stderr
       '';
       virtualHosts = builtins.listToAttrs (lib.flatten (map (domain: [
         { name  = "http://${domain}";
