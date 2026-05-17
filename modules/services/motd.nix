@@ -48,8 +48,7 @@ in
     environment.etc."fastfetch/config.jsonc".text =
       builtins.toJSON fastfetchConfig;
 
-    environment.etc."profile.d/motd.sh".text = ''
-      [ -n "$SSH_CONNECTION" ] || return 0
+    programs.zsh.loginShellInit = ''
       ${pkgs.fastfetch}/bin/fastfetch --config /etc/fastfetch/config.jsonc
     '';
   };
