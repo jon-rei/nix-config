@@ -4,12 +4,12 @@
 
   home-manager.users.jonas = import ./dots.nix;
 
-  programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   users.users.jonas = {
     isNormalUser = true;
     uid = 1000;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     extraGroups = [
       "wheel"
       "podman"

@@ -2,60 +2,46 @@
 {
   home.stateVersion = "25.11";
 
+  home.packages = with pkgs; [
+    fd
+    bat
+  ];
+
   programs = {
-    zsh = {
+    fish = {
       enable = true;
-      enableCompletion = true;
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
-      oh-my-zsh = {
-        enable = true;
-        theme = "robbyrussell";
-        plugins = [
-          "git"
-          "sudo"
-          "eza"
-          "fzf"
-          "zoxide"
-        ];
-      };
-      plugins = [
-        {
-          name = "fzf-tab";
-          src = pkgs.zsh-fzf-tab;
-          file = "share/fzf-tab/fzf-tab.plugin.zsh";
-        }
-        {
-          name = "zsh-history-substring-search";
-          src = pkgs.zsh-history-substring-search;
-          file = "share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh";
-        }
-      ];
-      initContent = ''
-        bindkey "^[[1;5C" forward-word
-        bindkey "^[[1;5D" backward-word
-        bindkey "^[[A" history-substring-search-up
-        bindkey "^[[B" history-substring-search-down
-      '';
       shellAliases = {
         grep = "rg";
         update = "sudo nixos-rebuild switch";
+        ls = "eza";
+        ll = "eza -l";
+        la = "eza -la";
+        lt = "eza --tree";
       };
+      plugins = [
+        {
+          name = "fzf-fish";
+          src = pkgs.fishPlugins.fzf-fish.src;
+        }
+      ];
+    };
+
+    starship = {
+      enable = true;
+      enableFishIntegration = true;
     };
 
     fzf = {
       enable = true;
-      enableZshIntegration = false;
-    };
-    zoxide = {
-      enable = true;
-      enableZshIntegration = false;
+      enableFishIntegration = false;
     };
 
-    direnv = {
+    zoxide = {
       enable = true;
-      enableZshIntegration = true;
+      enableFishIntegration = true;
     };
+
+    direnv.enable = true;
 
     git = {
       enable = true;

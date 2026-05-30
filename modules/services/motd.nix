@@ -67,7 +67,7 @@ in
 
     environment.etc."fastfetch/config.jsonc".text = builtins.toJSON fastfetchConfig;
 
-    programs.zsh.loginShellInit = ''
+    programs.fish.loginShellInit = ''
       ${pkgs.fastfetch}/bin/fastfetch --config /etc/fastfetch/config.jsonc
     '';
   };
