@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  pkgs-unstable,
+  pkgs,
   inputs,
   ...
 }:
@@ -22,7 +22,7 @@ in
 
     services.opencloud = {
       enable = true;
-      package = pkgs-unstable.opencloud;
+      package = pkgs.opencloud;
       url = "https://${domain}";
       address = "127.0.0.1";
       port = port;

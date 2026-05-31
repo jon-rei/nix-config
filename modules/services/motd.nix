@@ -41,7 +41,7 @@ let
       }
       {
         type = "command";
-        key  = "Reboot";
+        key = "Reboot";
         text = ''[ "$(readlink /run/booted-system/kernel)" != "$(readlink /run/current-system/kernel)" ] && printf '\033[33m⚠ required\033[0m' '';
       }
     ]

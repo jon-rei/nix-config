@@ -10,7 +10,7 @@ update:
 
 # Deploy to a host (builds on remote)
 deploy host:
-  nix develop --command nixos-rebuild-ng switch --flake .#{{host}} \
+  nix develop --command nixos-rebuild switch --flake .#{{host}} \
     --target-host jonas@{{host}}.dinoverse.de \
     --build-host jonas@{{host}}.dinoverse.de \
     --no-reexec \
@@ -18,7 +18,7 @@ deploy host:
 
 # Preview what would change without applying
 dry host:
-  nix develop --command nixos-rebuild-ng dry-activate --flake .#{{host}} \
+  nix develop --command nixos-rebuild dry-activate --flake .#{{host}} \
     --target-host jonas@{{host}}.dinoverse.de \
     --build-host jonas@{{host}}.dinoverse.de \
     --no-reexec \

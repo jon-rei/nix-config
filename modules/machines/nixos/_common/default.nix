@@ -53,8 +53,10 @@
 
   services.resolved = {
     enable = true;
-    dnssec = "true";
-    dnsovertls = "opportunistic";
+    settings.Resolve = {
+      DNSSEC = "true";
+      DNSOverTLS = "opportunistic";
+    };
   };
 
   networking.nameservers = [
