@@ -10,6 +10,7 @@
   programs = {
     fish = {
       enable = true;
+      interactiveShellInit = "set -g fish_greeting";
       shellAliases = {
         grep = "rg";
         update = ''sudo nixos-rebuild switch --flake "git+https://codeberg.org/jonrei/nix-config#(hostname)" --refresh'';
