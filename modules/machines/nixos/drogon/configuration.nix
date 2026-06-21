@@ -50,12 +50,12 @@
     ];
   };
   fail2ban.enable = true;
-  opencloud.enable = true;
+  nextcloud.enable = true;
 
   backup = {
     enable = true;
     paths = [
-      config.services.opencloud.stateDir
+      config.services.nextcloud.home
     ];
   };
 }
