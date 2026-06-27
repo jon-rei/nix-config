@@ -23,6 +23,7 @@ let
         ../../services/fail2ban.nix
         ../../services/motd.nix
         ../../services/nextcloud.nix
+        ../../services/websites.nix
         ./_common
         ../../users/jonas
         ./${hostname}/configuration.nix

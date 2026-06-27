@@ -49,6 +49,26 @@
       "reineke.cc"
     ];
   };
+  # websites = {
+  #   enable = true;
+  #   deployKeys = [
+  #     "ssh-ed25519 AAAA... github-actions-static-site"
+  #     "ssh-ed25519 AAAA... github-actions-hugo-site"
+  #   ];
+  #   sites = [
+  #     {
+  #       domain = "example.jonrei.de";
+  #       acmeHost = "jonrei.de";
+  #       root = "/var/www/static-site";
+  #     }
+  #     {
+  #       domain = "blog.jonrei.de";
+  #       acmeHost = "jonrei.de";
+  #       root = "/var/www/hugo-site";
+  #     }
+  #   ];
+  # };
+
   fail2ban.enable = true;
   nextcloud.enable = true;
 
