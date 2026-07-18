@@ -30,7 +30,7 @@ in
     services.nextcloud = {
       enable = true;
       hostName = "nix-nextcloud";
-      package = pkgs.nextcloud33;
+      package = pkgs.nextcloud34;
       database.createLocally = true;
       configureRedis = true;
       maxUploadSize = "16G";
