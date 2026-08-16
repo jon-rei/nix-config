@@ -19,7 +19,7 @@
         lt = "eza --tree";
       };
       functions = {
-        update = ''sudo nixos-rebuild switch --flake "git+https://github.com/jon-rei/nix-config#(hostname)" --refresh'';
+        update = ''sudo nixos-rebuild switch --flake "git+https://github.com/jon-rei/nix-config#"(hostname) --refresh'';
       };
       plugins = [
         {
