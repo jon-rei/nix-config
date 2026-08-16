@@ -1,0 +1,53 @@
+name: Update flake.lock
+
+on:
+  schedule:
+    # Daily, well ahead of drogon's 03:30 Europe/Berlin auto-upgrade window
+    # (00:00 UTC = 01:00-02:00 Berlin depending on DST).
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: update-flake-lock
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      - name: Enable Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d # v14
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Build all host configurations
+        run: |
+          mapfile -t hosts < <(nix eval --json '.#nixosConfigurations' --apply builtins.attrNames | jq -r '.[]')
+          for host in "${hosts[@]}"; do
+            echo "::group::Building $host"
+            nix build ".#nixosConfigurations.$host.config.system.build.toplevel" --no-link -L
+            echo "::endgroup::"
+          done
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet -- flake.lock; then
+            echo "flake.lock unchanged, nothing to do"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flake.lock
+          git commit -m "chore: update flake.lock"
+          git push
