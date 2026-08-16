@@ -64,7 +64,7 @@ just deploy <hostname>
 just dry <hostname>
 
 # Or directly on the host
-sudo nixos-rebuild switch --flake git+https://codeberg.org/jonrei/nix-config#<hostname> --refresh
+sudo nixos-rebuild switch --flake git+https://github.com/jon-rei/nix-config#<hostname> --refresh
 ```
 
 ## Adding a new host

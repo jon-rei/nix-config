@@ -45,7 +45,7 @@
 
   system.autoUpgrade = {
     enable = true;
-    flake = "git+https://codeberg.org/jonrei/nix-config#${config.networking.hostName}";
+    flake = "git+https://github.com/jon-rei/nix-config#${config.networking.hostName}";
     flags = [ "-L" ];
     dates = "*-*-* 03:30:00";
     allowReboot = true;

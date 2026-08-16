@@ -13,7 +13,7 @@
       interactiveShellInit = "set -g fish_greeting";
       shellAliases = {
         grep = "rg";
-        update = ''sudo nixos-rebuild switch --flake "git+https://codeberg.org/jonrei/nix-config#(hostname)" --refresh'';
+        update = ''sudo nixos-rebuild switch --flake "git+https://github.com/jon-rei/nix-config#(hostname)" --refresh'';
         ls = "eza";
         ll = "eza -l";
         la = "eza -la";
