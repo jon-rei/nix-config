@@ -7,6 +7,9 @@
 }:
 let
   domain = "cloud.jonrei.de";
+  collaboraDomain = "office.jonrei.de";
+  collaboraPort = 9980;
+  collaboraSubnet = "10.88.0.0/16";
   port = 9300;
 in
 {
@@ -43,6 +46,7 @@ in
           contacts
           notes
           tasks
+          richdocuments
           ;
       };
       settings = {
@@ -88,6 +92,52 @@ in
       ignoreregex =
     '';
 
+    virtualisation.podman.enable = true;
+    virtualisation.podman.defaultNetwork.settings.subnets = [
+      {
+        subnet = collaboraSubnet;
+        gateway = "10.88.0.1";
+      }
+    ];
+    virtualisation.oci-containers.backend = "podman";
+    virtualisation.oci-containers.containers.collabora = {
+      image = "collabora/code:latest";
+      ports = [ "127.0.0.1:${toString collaboraPort}:${toString collaboraPort}" ];
+      environment = {
+        aliasgroup1 = "https://${domain}";
+        server_name = "${collaboraDomain}:443";
+        extra_params = "--o:ssl.enable=false --o:ssl.termination=true";
+      };
+    };
+
+    systemd.services.nextcloud-richdocuments-config = {
+      description = "Configure Nextcloud Richdocuments WOPI settings";
+      after = [
+        "nextcloud-setup.service"
+        "podman-collabora.service"
+      ];
+      requires = [
+        "nextcloud-setup.service"
+        "podman-collabora.service"
+      ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "nextcloud";
+        ExecStart =
+          let
+            occ = "${config.services.nextcloud.occ}/bin/nextcloud-occ";
+          in
+          pkgs.writeShellScript "nextcloud-richdocuments-config" ''
+            ${occ} config:app:set richdocuments wopi_url --value="http://127.0.0.1:${toString collaboraPort}"
+            ${occ} config:app:set richdocuments public_wopi_url --value="https://${collaboraDomain}/"
+            ${occ} config:app:set richdocuments wopi_allowlist --value="127.0.0.1,::1,${collaboraSubnet}"
+            ${occ} richdocuments:setup
+          '';
+        RemainAfterExit = true;
+      };
+    };
+
     systemd.services.nextcloud-mimetype-migration = {
       description = "Nextcloud mimetype migration";
       after = [ "nextcloud-setup.service" ];
@@ -112,6 +162,13 @@ in
         request_body {
           max_size 16GB
         }
+      '';
+    };
+
+    services.caddy.virtualHosts.${collaboraDomain} = {
+      useACMEHost = "jonrei.de";
+      extraConfig = ''
+        reverse_proxy http://127.0.0.1:${toString collaboraPort}
       '';
     };
   };
