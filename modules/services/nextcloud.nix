@@ -7,10 +7,10 @@
 }:
 let
   domain = "cloud.jonrei.de";
+  port = 9300;
   collaboraDomain = "office.jonrei.de";
   collaboraPort = 9980;
   collaboraSubnet = "10.88.0.0/16";
-  port = 9300;
 in
 {
   options.nextcloud.enable = lib.mkEnableOption "Nextcloud";
@@ -73,6 +73,22 @@ in
     systemd.tmpfiles.rules = [
       "f ${config.services.nextcloud.datadir}/nextcloud.log 0640 nextcloud nextcloud -"
     ];
+
+    services.postgresqlBackup = {
+      enable = true;
+      databases = [ "nextcloud" ];
+      startAt = "*-*-* 03:00:00";
+    };
+
+    backup.paths = lib.mkIf config.backup.enable [
+      config.services.nextcloud.home
+      config.services.postgresqlBackup.location
+    ];
+
+    systemd.services."restic-backups-storagebox" = lib.mkIf config.backup.enable {
+      after = [ "postgresqlBackup-nextcloud.service" ];
+      wants = [ "postgresqlBackup-nextcloud.service" ];
+    };
 
     services.fail2ban.jails.nextcloud = {
       settings = {

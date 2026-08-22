@@ -1,4 +1,4 @@
-{ config, modulesPath, ... }:
+{ modulesPath, ... }:
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -67,10 +67,5 @@
   fail2ban.enable = true;
   nextcloud.enable = true;
 
-  backup = {
-    enable = true;
-    paths = [
-      config.services.nextcloud.home
-    ];
-  };
+  backup.enable = true;
 }
