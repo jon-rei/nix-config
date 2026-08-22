@@ -25,11 +25,7 @@ in
           options = {
             domain = lib.mkOption {
               type = lib.types.str;
-              description = "Full domain name, e.g. example.jonrei.de.";
-            };
-            acmeHost = lib.mkOption {
-              type = lib.types.str;
-              description = "Base domain to use the ACME cert from, e.g. jonrei.de.";
+              description = "Full domain name, e.g. example.com.";
             };
             root = lib.mkOption {
               type = lib.types.str;
@@ -56,9 +52,8 @@ in
 
     services.caddy.virtualHosts = builtins.listToAttrs (
       map (site: {
-        name = "https://${site.domain}";
+        name = site.domain;
         value = {
-          useACMEHost = site.acmeHost;
           extraConfig = ''
             root * ${site.root}
             file_server

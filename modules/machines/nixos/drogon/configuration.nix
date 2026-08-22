@@ -44,10 +44,7 @@
 
   caddy = {
     enable = true;
-    acmeDomains = [
-      "jonrei.de"
-      "reineke.cc"
-    ];
+    acmeDomains = [ "jonrei.de" ];
   };
   # websites = {
   #   enable = true;
@@ -57,13 +54,11 @@
   #   ];
   #   sites = [
   #     {
-  #       domain = "example.jonrei.de";
-  #       acmeHost = "jonrei.de";
+  #       domain = "example.com";
   #       root = "/var/www/static-site";
   #     }
   #     {
-  #       domain = "blog.jonrei.de";
-  #       acmeHost = "jonrei.de";
+  #       domain = "example.org";
   #       root = "/var/www/hugo-site";
   #     }
   #   ];
