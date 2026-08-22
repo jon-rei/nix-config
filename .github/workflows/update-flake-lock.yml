@@ -2,8 +2,7 @@ name: Update flake.lock
 
 on:
   schedule:
-    # Daily, well ahead of drogon's 03:30 Europe/Berlin auto-upgrade window
-    # (00:00 UTC = 01:00-02:00 Berlin depending on DST).
+    # Daily, ahead of 03:30 Europe/Berlin auto-upgrade window
     - cron: "0 0 * * *"
   workflow_dispatch:
 
@@ -24,9 +23,6 @@ jobs:
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v22
-
-      - name: Enable Magic Nix Cache
-        uses: DeterminateSystems/magic-nix-cache-action@v14
 
       - name: Update flake.lock
         run: nix flake update
