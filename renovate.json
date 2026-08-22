@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":automergeMinor",
+    ":automergePatch"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^modules/services/nextcloud\\.nix$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\n\\s*image = \"[^:]+:(?<currentValue>[^\"]+)\";"
+      ],
+      "datasourceTemplate": "{{{datasource}}}",
+      "depNameTemplate": "{{{depName}}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": ["collabora/code"],
+      "automerge": true
+    }
+  ]
+}

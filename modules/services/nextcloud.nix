@@ -122,7 +122,8 @@ in
     ];
     virtualisation.oci-containers.backend = "podman";
     virtualisation.oci-containers.containers.collabora = {
-      image = "collabora/code:latest";
+      # renovate: datasource=docker depName=collabora/code
+      image = "collabora/code:26.04.3.1.1";
       ports = [ "127.0.0.1:${toString collaboraPort}:${toString collaboraPort}" ];
       environment = {
         aliasgroup1 = "https://${domain}";
