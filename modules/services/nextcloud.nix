@@ -6,9 +6,10 @@
   ...
 }:
 let
-  domain = "cloud.jonrei.de";
+  baseDomain = "jonrei.de";
+  domain = "cloud.${baseDomain}";
   port = 9300;
-  collaboraDomain = "office.jonrei.de";
+  collaboraDomain = "office.${baseDomain}";
   collaboraPort = 9980;
   collaboraSubnet = "10.88.0.0/16";
 in
@@ -45,12 +46,16 @@ in
           calendar
           contacts
           notes
-          tasks
           richdocuments
+          previewgenerator
+          twofactor_webauthn
           ;
       };
       settings = {
         overwriteprotocol = "https";
+        "overwrite.cli.url" = "https://${domain}";
+        defaultapp = "files";
+        default_language = "de";
         default_phone_region = "DE";
         trusted_domains = [ domain ];
         trusted_proxies = [ "127.0.0.1" ];
@@ -58,9 +63,9 @@ in
         log_rotate_size = 100 * 1024 * 1024;
         loglevel = 2;
         maintenance_window_start = 4;
-        "token_auth_enforced" = true;
+        token_auth_enforced = true;
         "auth.bruteforce.protection.enabled" = true;
-        server_id = "drogon";
+        serverid = 1;
       };
       phpOptions."opcache.interned_strings_buffer" = "16";
       config = {
@@ -145,11 +150,34 @@ in
             occ = "${config.services.nextcloud.occ}/bin/nextcloud-occ";
           in
           pkgs.writeShellScript "nextcloud-richdocuments-config" ''
+            set -e
+            # Wait for Nextcloud finishing its own upgrade/maintenance-mode
+            for i in $(seq 1 60); do
+              if ${occ} status --exit-code >/dev/null 2>&1; then
+                break
+              fi
+              echo "Waiting for Nextcloud to leave maintenance mode... ($i/60)"
+              sleep 5
+            done
+
             ${occ} config:app:set richdocuments wopi_url --value="http://127.0.0.1:${toString collaboraPort}"
             ${occ} config:app:set richdocuments public_wopi_url --value="https://${collaboraDomain}/"
             ${occ} config:app:set richdocuments wopi_allowlist --value="127.0.0.1,::1,${collaboraSubnet}"
             ${occ} richdocuments:setup
           '';
+        RemainAfterExit = true;
+      };
+    };
+
+    systemd.services.nextcloud-disable-app-api = {
+      description = "Disable Nextcloud AppAPI app";
+      after = [ "nextcloud-setup.service" ];
+      requires = [ "nextcloud-setup.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "nextcloud";
+        ExecStart = "${config.services.nextcloud.occ}/bin/nextcloud-occ app:disable app_api";
         RemainAfterExit = true;
       };
     };
@@ -168,7 +196,7 @@ in
     };
 
     services.caddy.virtualHosts.${domain} = {
-      useACMEHost = "jonrei.de";
+      useACMEHost = baseDomain;
       extraConfig = ''
         reverse_proxy http://127.0.0.1:${toString port}
         header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -182,7 +210,7 @@ in
     };
 
     services.caddy.virtualHosts.${collaboraDomain} = {
-      useACMEHost = "jonrei.de";
+      useACMEHost = baseDomain;
       extraConfig = ''
         reverse_proxy http://127.0.0.1:${toString collaboraPort}
       '';
