@@ -1,6 +1,6 @@
 # nix-config
 
-Personal NixOS infrastructure, managed as a public flake on Codeberg.
+Personal NixOS infrastructure, managed as a public flake.
 
 ## Dev shell
 
@@ -30,30 +30,6 @@ age-keygen -o ~/.config/age/keys.txt
 agenix -e secrets/<name>.age
 ```
 
-## Installing a new host
-
-1. Create the VM and boot into rescue mode
-2. From your machine:
-```bash
-nixos-anywhere --flake .#<hostname> --build-on-remote root@<ip>
-```
-3. After first boot, get the SSH host pubkey and add it to `secrets/secrets.nix`:
-```bash
-ssh-keyscan <ip> | grep ed25519
-```
-4. Create the secrets for the host:
-```bash
-agenix -e secrets/<name>.age
-```
-5. Add the SSH host key to your storage box (for restic backups):
-```bash
-cat /etc/ssh/ssh_host_ed25519_key.pub | ssh -p23 u00000@u00000.your-storagebox.de install-ssh-key
-```
-6. Redeploy:
-```bash
-just deploy <hostname>
-```
-
 ## Deploying
 
 ```bash
@@ -67,9 +43,7 @@ just dry <hostname>
 sudo nixos-rebuild switch --flake git+https://github.com/jon-rei/nix-config#<hostname> --refresh
 ```
 
-## Adding a new host
+## Docs
 
-1. Create `modules/machines/nixos/<hostname>/configuration.nix`
-2. The host is auto-discovered by `flake.nix` — no manual registration needed
-3. Add required secrets to `secrets/secrets.nix`
-4. Install with nixos-anywhere (see above)
+- [Adding a new host](docs/adding-a-new-host.md)
+- [Restoring Nextcloud from backup](docs/nextcloud-restore.md)
