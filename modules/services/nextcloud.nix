@@ -139,7 +139,7 @@ in
       environment = {
         aliasgroup1 = "https://${domain}";
         server_name = "${collaboraDomain}:443";
-        extra_params = "--o:ssl.enable=false --o:ssl.termination=true";
+        extra_params = "--o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false";
       };
     };
 
