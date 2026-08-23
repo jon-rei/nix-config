@@ -51,6 +51,11 @@ in
           twofactor_webauthn
           ;
       };
+      notify_push = {
+        enable = true;
+        # Custom url needed here since we use caddy in front of nginx
+        nextcloudUrl = "https://${domain}";
+      };
       settings = {
         overwriteprotocol = "https";
         "overwrite.cli.url" = "https://${domain}";
@@ -78,6 +83,12 @@ in
     systemd.tmpfiles.rules = [
       "f ${config.services.nextcloud.datadir}/nextcloud.log 0640 nextcloud nextcloud -"
     ];
+
+    # notify_push's self-test round-trips through Caddy+nginx, which overwrite
+    # X-Forwarded-For on each hop; bypass the proxy chain for the daemon's own
+    # calls back to Nextcloud so trusted-proxy validation only sees one hop.
+    systemd.services.nextcloud-notify_push.environment.NEXTCLOUD_URL =
+      lib.mkForce "http://127.0.0.1:${toString port}";
 
     services.postgresqlBackup = {
       enable = true;
