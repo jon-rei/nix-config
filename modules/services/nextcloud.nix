@@ -181,15 +181,23 @@ in
       };
     };
 
-    systemd.services.nextcloud-disable-app-api = {
-      description = "Disable Nextcloud AppAPI app";
+    systemd.services.nextcloud-disable-apps = {
+      description = "Disable unwanted Nextcloud apps";
       after = [ "nextcloud-setup.service" ];
       requires = [ "nextcloud-setup.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
         User = "nextcloud";
-        ExecStart = "${config.services.nextcloud.occ}/bin/nextcloud-occ app:disable app_api";
+        ExecStart =
+          let
+            occ = "${config.services.nextcloud.occ}/bin/nextcloud-occ";
+          in
+          pkgs.writeShellScript "nextcloud-disable-apps" ''
+            set -e
+            ${occ} app:disable app_api
+            ${occ} app:disable survey_client
+          '';
         RemainAfterExit = true;
       };
     };
