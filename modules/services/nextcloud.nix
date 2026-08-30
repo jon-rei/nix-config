@@ -41,6 +41,7 @@ in
       https = true;
       autoUpdateApps.enable = true;
       extraAppsEnable = true;
+      appstoreEnable = true;
       extraApps = with config.services.nextcloud.package.packages.apps; {
         inherit
           calendar
@@ -162,20 +163,34 @@ in
             occ = "${config.services.nextcloud.occ}/bin/nextcloud-occ";
           in
           pkgs.writeShellScript "nextcloud-richdocuments-config" ''
-            set -e
-            # Wait for Nextcloud finishing its own upgrade/maintenance-mode
-            for i in $(seq 1 60); do
-              if ${occ} status --exit-code >/dev/null 2>&1; then
-                break
-              fi
-              echo "Waiting for Nextcloud to leave maintenance mode... ($i/60)"
-              sleep 5
-            done
+            wait_for_ready() {
+              # Nextcloud has been observed re-entering maintenance mode
+              # transiently after nextcloud-setup.service already reports
+              # done (cause unconfirmed), so this is checked before every
+              # retry below rather than once up front.
+              for i in $(seq 1 60); do
+                if ${occ} status --exit-code >/dev/null 2>&1; then
+                  return 0
+                fi
+                echo "Waiting for Nextcloud to leave maintenance mode... ($i/60)"
+                sleep 5
+              done
+              return 1
+            }
 
-            ${occ} config:app:set richdocuments wopi_url --value="http://127.0.0.1:${toString collaboraPort}"
-            ${occ} config:app:set richdocuments public_wopi_url --value="https://${collaboraDomain}/"
-            ${occ} config:app:set richdocuments wopi_allowlist --value="127.0.0.1,::1,${collaboraSubnet}"
-            ${occ} richdocuments:setup
+            for attempt in $(seq 1 5); do
+              wait_for_ready || { echo "Nextcloud never left maintenance mode"; exit 1; }
+              if ${occ} config:app:set richdocuments wopi_url --value="http://127.0.0.1:${toString collaboraPort}" \
+                && ${occ} config:app:set richdocuments public_wopi_url --value="https://${collaboraDomain}/" \
+                && ${occ} config:app:set richdocuments wopi_allowlist --value="127.0.0.1,::1,${collaboraSubnet}" \
+                && ${occ} richdocuments:setup; then
+                exit 0
+              fi
+              echo "richdocuments configuration attempt $attempt failed, retrying in 10s..."
+              sleep 10
+            done
+            echo "richdocuments configuration failed after multiple attempts"
+            exit 1
           '';
         RemainAfterExit = true;
       };
