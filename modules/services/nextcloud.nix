@@ -41,7 +41,6 @@ in
       https = true;
       autoUpdateApps.enable = true;
       extraAppsEnable = true;
-      appstoreEnable = true;
       extraApps = with config.services.nextcloud.package.packages.apps; {
         inherit
           calendar
