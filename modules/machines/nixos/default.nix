@@ -21,6 +21,7 @@ let
         ../../services/backup.nix
         ../../services/caddy.nix
         ../../services/fail2ban.nix
+        ../../services/gotify.nix
         ../../services/motd.nix
         ../../services/nextcloud.nix
         ../../services/websites.nix
