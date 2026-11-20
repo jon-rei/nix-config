@@ -65,7 +65,6 @@
   # };
 
   fail2ban.enable = true;
-  nextcloud.enable = true;
 
   backup.enable = true;
 }

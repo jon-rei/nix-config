@@ -5,17 +5,6 @@
     ":automergeMinor",
     ":automergePatch"
   ],
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^modules/services/nextcloud\\.nix$/"],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)\\n\\s*image = \"[^:]+:(?<currentValue>[^\"]+)\";"
-      ],
-      "datasourceTemplate": "{{{datasource}}}",
-      "depNameTemplate": "{{{depName}}}"
-    }
-  ],
   "packageRules": [
     {
       "matchDepNames": ["collabora/code"],

@@ -10,7 +10,6 @@ let
   ];
 in
 {
-  "nextcloud-admin-password.age".publicKeys = keyList;
   "desec-env.age".publicKeys = keyList;
   "restic-password.age".publicKeys = keyList;
 }

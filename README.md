@@ -46,4 +46,3 @@ sudo nixos-rebuild switch --flake git+https://github.com/jon-rei/nix-config#<hos
 ## Docs
 
 - [Adding a new host](docs/adding-a-new-host.md)
-- [Restoring Nextcloud from backup](docs/nextcloud-restore.md)
